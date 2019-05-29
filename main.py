@@ -20,9 +20,7 @@ class Position_Embedding(Layer):
         if (self.size == None) or (self.mode == 'sum'):
             self.size = int(x.shape[-1])
         batch_size,seq_len = K.shape(x)[0],K.shape(x)[1]
-        position_j = 1. / K.pow(10000., \
-                                 2 * K.arange(self.size / 2, dtype='float32' \
-                               ) / self.size)
+        position_j = 1.0 / K.pow(10000.0,2 * K.arange(self.size / 2, dtype='float32') / self.size)
         position_j = K.expand_dims(position_j, 0)
         position_i = K.cumsum(K.ones_like(x[:,:,0]), 1)-1 #K.arange不支持变长，只好用这种方法生成
         position_i = K.expand_dims(position_i, 2)
@@ -116,7 +114,7 @@ class Attention(Layer):
         return (input_shape[0][0], input_shape[0][1], self.output_dim)
 
 max_features = 20000
-maxlen = 80
+maxlen = 10
 batch_size = 32
 
 logger.info('Loading data...')
