@@ -145,4 +145,4 @@ model.compile(loss='binary_crossentropy',
               metrics=['accuracy'])
 
 logger.info('Training...')
-model.fit(x_train, y_train,batch_size=batch_size,epochs=2,validation_data=(x_test, y_test))
+model.fit(x_train, y_train,batch_size=batch_size,epochs=50,validation_data=(x_test, y_test))
