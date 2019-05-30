@@ -5,7 +5,6 @@ from keras import backend as K
 from keras.engine.topology import Layer
 from keras.models import Model
 from keras.layers import *
-import tensorflow as tf
 
 from loguru import logger
 
@@ -111,17 +110,17 @@ class Attention(Layer):
         #==softmax(Q*Kt/dk**0.5)*V
         A = K.batch_dot(Q_seq, K_seq, axes=[3,3]) / self.size_per_head**0.5
         A = K.permute_dimensions(A, (0,3,2,1))
-        #A = self.Mask(A, V_len, 'add')
-        #A = K.permute_dimensions(A, (0,3,2,1)) 
-        # if self.mask_right:
-        #     ones = K.ones_like(A[:1, :1])
-        #     mask = (ones - K.tf.matrix_band_part(ones, -1, 0)) * 1e12
-        #     A = A - mask
+        A = self.Mask(A, V_len, 'add')
+        A = K.permute_dimensions(A, (0,3,2,1)) 
+        if self.mask_right:
+            ones = K.ones_like(A[:1, :1])
+            mask = (ones - K.tf.matrix_band_part(ones, -1, 0)) * 1e12
+            A = A - mask
         A = K.softmax(A)
         O_seq = K.batch_dot(A, V_seq, axes=[3,2])
         O_seq = K.permute_dimensions(O_seq, (0,2,1,3))
         O_seq = K.reshape(O_seq, (-1, K.shape(O_seq)[1], self.output_dim))
-        #O_seq = self.Mask(O_seq, Q_len, 'mul')
+        O_seq = self.Mask(O_seq, Q_len, 'mul')
         return O_seq
         
     def compute_output_shape(self, input_shape):
