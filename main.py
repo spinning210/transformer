@@ -126,7 +126,7 @@ class Attention(Layer):
     def compute_output_shape(self, input_shape):
         return (input_shape[0][0], input_shape[0][1], self.output_dim)
 
-max_features = 20000 #出現沒超過20000次
+max_features = 20000 #出現沒超過20000次當垃圾
 maxlen = 80
 batch_size = 32
 
@@ -144,7 +144,7 @@ logger.info('x_test shape:' + str(x_test.shape))
 
 
 S_inputs = Input(shape=(None,), dtype='int32')
-embeddings = Embedding(max_features, 128)(S_inputs)  #max_features = 字典长度 ||  128 = 全连接嵌入的维度
+embeddings = Embedding(max_features, 128)(S_inputs)  #max_features = 字典长度 ||  128 = 詞的维度
 embeddings = Position_Embedding()(embeddings) 
 O_seq = Attention(8,16)([embeddings,embeddings,embeddings])
 O_seq = GlobalAveragePooling1D()(O_seq)
@@ -158,4 +158,4 @@ model.compile(loss='binary_crossentropy',
               metrics=['accuracy'])
 
 logger.info('Training...')
-model.fit(x_train, y_train,batch_size=batch_size,epochs=10,validation_data=(x_test, y_test))
+model.fit(x_train, y_train,batch_size=batch_size,epochs=5,validation_data=(x_test, y_test))
