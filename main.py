@@ -23,8 +23,8 @@ class Position_Embedding(Layer):
         batch_size,seq_len = K.shape(x)[0],K.shape(x)[1]
         position_j = 1.0 / K.pow(10000.0,2 * K.arange(self.size / 2, dtype='float32') / self.size)
         #self.my_print(position_j)
-        position_j = K.expand_dims(position_j, 0) #在索引position_j的 axis=0 轴，添加 1 个尺寸的维度。
-        position_i = K.cumsum(K.ones_like(x[:,:,0]), 1)-1 #K.arange不支持变长，只好用这种方法生成
+        position_j = K.expand_dims(position_j, 0) #在索引position_j的 axis=0軸 增加一個维度。
+        position_i = K.cumsum(K.ones_like(x[:,:,0]), 1)-1 
         position_i = K.expand_dims(position_i, 2)
         position_ij = K.dot(position_i, position_j)
         position_ij = K.concatenate([K.cos(position_ij), K.sin(position_ij)], 2)
@@ -126,7 +126,7 @@ class Attention(Layer):
     def compute_output_shape(self, input_shape):
         return (input_shape[0][0], input_shape[0][1], self.output_dim)
 
-max_features = 20000 #出現沒超過20000次當垃圾
+max_features = 20000 
 maxlen = 80
 batch_size = 32
 
