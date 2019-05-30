@@ -36,11 +36,11 @@ class Position_Embedding(Layer):
             self.my_print(K.concatenate([position_ij, x], 2))
             return K.concatenate([position_ij, x], 2)
 
-    def my_print(self,x):
-        with tf.Session() as sess:
-            init = tf.global_variables_initializer()
-            sess.run(init)
-            print(x.eval())
+    # def my_print(self,x):
+    #     with tf.Session() as sess:
+    #         init = tf.global_variables_initializer()
+    #         sess.run(init)
+    #         print(x.eval())
         
     def compute_output_shape(self, input_shape):
         if self.mode == 'sum':
